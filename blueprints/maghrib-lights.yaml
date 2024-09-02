@@ -1,0 +1,45 @@
+blueprint:
+  name: Maghrib Lights
+  description: Turn on lights at Maghrib.
+  domain: automation
+  input:
+    occupancy_entity:
+      name: Occupancy
+      description: Occupancy is detected.
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: occupancy
+    light_target:
+      description:  light on
+      name: Light
+      selector:
+        target:
+          entity:
+            domain: light
+    flag:
+      name: Enabled Flag
+      description: Toggle that decides whether to run this automation or not.
+      selector:
+        entity:
+          domain: input_boolean
+
+# If motion is detected within the delay,
+# we restart the script.
+mode: single
+max_exceeded: silent
+
+# automation normaly
+trigger:
+  - platform: sun
+    event: sunset
+
+condition:
+  - conditions:
+    - condition: state
+      entity_id: !input occupancy_entity
+      state: "on"
+
+action:
+  - action: light.turn_on
+    target: !input light_target

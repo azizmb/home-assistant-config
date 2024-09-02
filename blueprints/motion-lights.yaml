@@ -1,0 +1,65 @@
+blueprint:
+  name: Motion Lights
+  description: Turn on a light when room is occupied.
+  domain: automation
+  input:
+    motion_entity:
+      name: Motion
+      description: Motion is detected.
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: motion
+    light_target:
+      description:  light on
+      name: Light
+      selector:
+        target:
+          entity:
+            domain: light
+    no_motion_wait:
+      name: Wait time
+      description: Time to leave the light on after last motion is detected.
+      default: 10
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: seconds
+    flag:
+      name: Enabled Flag
+      description: Toggle that decides whether to run this automation or not.
+      selector:
+        entity:
+          domain: input_boolean
+
+# If motion is detected within the delay,
+# we restart the script.
+mode: restart
+max_exceeded: silent
+
+# automation normaly
+trigger:
+  - platform: state
+    entity_id: !input motion_entity
+    from: "off"
+    to: "on"
+  - platform: sun
+    event: sunset
+
+condition:
+  - conditions:
+    - condition: sun
+      after: sunset
+
+action:
+  - action: light.turn_on
+    target: !input light_target
+  - wait_for_trigger:
+      platform: state
+      entity_id: !input motion_entity
+      from: "on"
+      to: "off"
+  - delay: !input no_motion_wait
+  - action: light.turn_off
+    target: !input light_target
