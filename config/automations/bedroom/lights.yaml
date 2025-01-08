@@ -1,0 +1,45 @@
+- id: '1112311712098'
+  alias: Bedroom - Lights - Maghrib
+  use_blueprint:
+    path: local/maghrib-lights.yaml
+    input:
+      occupancy_entity: binary_sensor.occupancy_bedroom
+      light_target:
+        - light.esp01_bed_light
+        - light.zss02_l1
+
+- id: '8513465843864'
+  alias: Bedroom - Lights - Occupancy
+  use_blueprint:
+    path: local/occupancy-lights.yaml
+    input:
+      occupancy_entity: binary_sensor.occupancy_bedroom
+      light_target:
+        - light.esp01_bed_light
+        - light.zss02_l1
+
+- id: '8513465843844'
+  alias: Bedroom - Lights - Fajr
+
+  condition:
+    - condition: state
+      entity_id: binary_sensor.occupancy_bedroom
+      state: "on"
+
+  triggers:
+    - platform: sun
+      event: sunrise
+      offset: "-00:30:00"
+
+  action:
+    - action: light.turn_on
+      target:
+        entity_id: light.esp01_bed_light
+      data:
+        transition: 1
+        brightness_pct: 50
+    - action: light.turn_off
+      target:
+        entity_id: light.esp01_bed_light
+      data:
+        transition: 1200

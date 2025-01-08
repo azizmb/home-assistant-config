@@ -14,32 +14,30 @@ blueprint:
       description:  light on
       name: Light
       selector:
-        target:
-          entity:
-            domain: light
-    flag:
-      name: Enabled Flag
-      description: Toggle that decides whether to run this automation or not.
-      selector:
         entity:
-          domain: input_boolean
+          domain:
+            - light
+          multiple: true
 
-# If motion is detected within the delay,
-# we restart the script.
 mode: single
 max_exceeded: silent
 
-# automation normaly
 trigger:
   - platform: sun
     event: sunset
 
+variables:
+  lights: !input "light_target"
+
 condition:
-  - conditions:
-    - condition: state
-      entity_id: !input occupancy_entity
-      state: "on"
+  - condition: state
+    entity_id: !input occupancy_entity
+    state: "on"
 
 action:
   - action: light.turn_on
-    target: !input light_target
+    target:
+      entity_id: '{{ expand(lights) }}'
+    data:
+      transition: 600
+      brightness_pct: 100

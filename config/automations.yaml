@@ -1,0 +1,135 @@
+- id: '1736176173682'
+  alias: Bedroom - Bed Controls - Aziz
+  description: ''
+  use_blueprint:
+    path: local/ts004-wss.yaml
+    input:
+      switch:
+      - sensor.wss04_action
+      button_one_short_press:
+      - action: cover.toggle
+        metadata: {}
+        data: {}
+        target:
+          area_id: bedroom
+      button_one_double_press:
+      - action: cover.set_cover_position
+        metadata: {}
+        data:
+          position: 30
+        target:
+          area_id: bedroom
+      button_two_short_press:
+      - if:
+        - condition: or
+          conditions:
+          - condition: time
+            before: '23:00:00'
+        then:
+        - action: light.toggle
+          metadata: {}
+          data:
+            transition: 1
+            brightness_pct: 30
+          target:
+            entity_id: light.esp01_bed_light
+        else:
+        - action: light.toggle
+          metadata: {}
+          data:
+            transition: 1
+            brightness_pct: 100
+          target:
+            entity_id: light.esp01_bed_light
+      button_two_double_press:
+      - action: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.zss02_l1
+      button_three_short_press:
+      - if:
+        - condition: state
+          entity_id: switch.wss01_socket_1
+          state: 'on'
+        then:
+        - action: switch.turn_off
+          entity_id: switch.wss01_socket_1
+        - action: script.turn_off
+          target:
+            entity_id: script.control_bed_heater
+        else:
+        - action: script.turn_on
+          data:
+            variables:
+              heater: switch.wss01_socket_1
+          target:
+            entity_id: script.control_bed_heater
+
+- id: '1736176998592'
+  alias: Bedroom - Bed Controls - Nisrin
+  description: ''
+  use_blueprint:
+    path: local/ts004-wss.yaml
+    input:
+      switch:
+      - sensor.wss05_action
+      button_one_short_press:
+      - action: cover.toggle
+        metadata: {}
+        data: {}
+        target:
+          area_id: bedroom
+      button_one_double_press:
+      - action: cover.set_cover_position
+        metadata: {}
+        data:
+          position: 30
+        target:
+          area_id: bedroom
+      button_two_short_press:
+      - if:
+        - condition: or
+          conditions:
+          - condition: time
+            after: '23:00:00'
+        then:
+        - action: light.toggle
+          metadata: {}
+          data:
+            transition: 1
+            brightness_pct: 30
+          target:
+            entity_id: light.esp01_bed_light
+        else:
+        - action: light.toggle
+          metadata: {}
+          data:
+            transition: 1
+            brightness_pct: 100
+          target:
+            entity_id: light.esp01_bed_light
+      button_two_double_press:
+      - action: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.zss02_l1
+      button_three_short_press:
+      - if:
+        - condition: state
+          entity_id: switch.wss01_socket_1
+          state: 'on'
+        then:
+        - action: switch.turn_off
+          entity_id: switch.wss01_socket_1
+        - action: script.turn_off
+          target:
+            entity_id: script.control_bed_heater
+        else:
+        - action: script.turn_on
+          data:
+            variables:
+              heater: switch.wss01_socket_1
+          target:
+            entity_id: script.control_bed_heater

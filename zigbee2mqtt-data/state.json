@@ -1,0 +1,130 @@
+{
+    "0xa4c138154539d294": {
+        "temperature": 22.92,
+        "humidity": 58.76,
+        "battery": 35,
+        "linkquality": 108
+    },
+    "0xa4c138dfb84b0835": {
+        "temperature": 23.59,
+        "humidity": 59.55,
+        "battery": 45,
+        "linkquality": 102
+    },
+    "0xa4c138f18721c38a": {
+        "operation_mode": "event",
+        "battery": 31,
+        "voltage": 2600,
+        "linkquality": 81
+    },
+    "0x0ceff6fffebf35e4": {
+        "linkquality": 93
+    },
+    "0x70b3d52b600a7da5": {
+        "state": "OFF",
+        "child_lock": "UNLOCK",
+        "power": 0,
+        "current": 0.02,
+        "voltage": 233,
+        "energy": 0.05,
+        "linkquality": 54
+    },
+    "0xa4c13868473ca9ee": {
+        "occupancy": false,
+        "illuminance": 45,
+        "battery": 100,
+        "linkquality": 75
+    },
+    "0xa4c13868cfe333f7": {
+        "contact": true,
+        "tamper": false,
+        "battery_low": false,
+        "voltage": 2500,
+        "battery": 87,
+        "linkquality": 72
+    },
+    "0xa4c138015e42e643": {
+        "battery": 100,
+        "voltage": 2900,
+        "linkquality": 69
+    },
+    "0xa4c1380fbcbfaae9": {
+        "battery": 100,
+        "occupancy": false,
+        "illuminance": 771,
+        "linkquality": 72
+    },
+    "0xa4c1388700fdf966": {
+        "operation_mode": "event",
+        "battery": 100,
+        "voltage": 2700,
+        "linkquality": 78
+    },
+    "0xa4c138444f544b06": {
+        "state_l1": "ON",
+        "power_on_behavior_l1": "off",
+        "switch_type": "toggle",
+        "state_l2": "OFF",
+        "linkquality": 72
+    },
+    "0xa4c138ffcb285131": {
+        "illuminance_lux": 5,
+        "target_distance": 0,
+        "maximum_range": 6,
+        "radar_sensitivity": 2,
+        "minimum_range": 2.1,
+        "detection_delay": 0.6,
+        "fading_time": 5,
+        "presence": false,
+        "linkquality": 63
+    },
+    "0xa4c138cb0365aa9d": {
+        "battery": 100,
+        "voltage": 3000,
+        "linkquality": 72
+    },
+    "0xa4c1384b195eaec6": {
+        "battery": 100,
+        "occupancy": false,
+        "illuminance": 195,
+        "linkquality": 75
+    },
+    "0xa4c138c33628f3cb": {
+        "battery": 100,
+        "occupancy": false,
+        "illuminance": 1933,
+        "linkquality": 84,
+        "illuminance_interval": 60,
+        "keep_time": "10",
+        "sensitivity": "high"
+    },
+    "0xa4c1389623108d0b": {
+        "illuminance_lux": 4,
+        "maximum_range": 3,
+        "radar_sensitivity": 7,
+        "minimum_range": 1.95,
+        "detection_delay": 0,
+        "fading_time": 5,
+        "target_distance": 1.97,
+        "presence": true,
+        "linkquality": 3
+    },
+    "0xa4c1380ed7dfd452": {
+        "operation_mode": "event",
+        "battery": 100,
+        "voltage": 2800,
+        "linkquality": 72
+    },
+    "0x842712fffe476f27": {
+        "factory_reset": "S",
+        "state": "OPEN",
+        "position": 29,
+        "work_state": "learning",
+        "battery": 100,
+        "motor_direction": "right",
+        "set_upper_limit": "start",
+        "temperature": 22,
+        "illuminance": 2,
+        "linkquality": 75
+    }
+}

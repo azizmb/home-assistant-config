@@ -1,0 +1,72 @@
+permit_join: true
+mqtt:
+  base_topic: zigbee2mqtt
+  server: mqtt://mqtt
+homeassistant: true
+serial:
+  port: /dev/ttyUSB0
+frontend:
+  port: 8080
+advanced:
+  network_key:
+    - 70
+    - 109
+    - 245
+    - 245
+    - 114
+    - 120
+    - 223
+    - 93
+    - 68
+    - 202
+    - 232
+    - 115
+    - 125
+    - 61
+    - 245
+    - 112
+devices:
+  '0xa4c138154539d294':
+    friendly_name: THS04
+  '0xa4c138dfb84b0835':
+    friendly_name: THS02
+  '0xa4c138f18721c38a':
+    friendly_name: SSK01
+  '0x0ceff6fffebf35e4':
+    friendly_name: '0x0ceff6fffebf35e4'
+  '0x70b3d52b600a7da5':
+    friendly_name: ZSS01
+  '0xa4c13868473ca9ee':
+    friendly_name: MS03
+  '0xa4c13868cfe333f7':
+    friendly_name: DS02
+  '0xa4c138015e42e643':
+    friendly_name: WSS04
+  '0xa4c1380fbcbfaae9':
+    friendly_name: MS04
+  '0xa4c1388700fdf966':
+    friendly_name: SSS02
+  '0xa4c138444f544b06':
+    friendly_name: ZSS02
+  '0xa4c138ffcb285131':
+    friendly_name: PS03
+  '0xa4c138cb0365aa9d':
+    friendly_name: WSS05
+  '0xa4c1384b195eaec6':
+    friendly_name: MS02
+  '0xa4c138c33628f3cb':
+    friendly_name: MS06
+  '0xa4c1389623108d0b':
+    friendly_name: PS01
+  '0xa4c1380ed7dfd452':
+    friendly_name: SSS01
+  '0x842712fffe476f27':
+    friendly_name: Curtains - Bedroom
+  '0xa4c138f77a85bfc9':
+    friendly_name: '0xa4c138f77a85bfc9'
+  '0xa4c1387941d710ee':
+    friendly_name: '0xa4c1387941d710ee'
+  '0xa4c13870c3f8c16f':
+    friendly_name: '0xa4c13870c3f8c16f'
+external_converters:
+  - curtain-bot.js

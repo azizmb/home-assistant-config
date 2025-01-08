@@ -1,0 +1,59 @@
+- id: '4448387364818'
+  alias: Laundry - Lights
+  description: ""
+  mode: single
+  triggers:
+    - entity_id:
+        - binary_sensor.ms03_occupancy
+      from: "off"
+      to: "on"
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 0
+      id: motion-on
+      trigger: state
+    - entity_id:
+        - binary_sensor.ms03_occupancy
+      from: "on"
+      to: "off"
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 10
+      id: motion-of
+      trigger: state
+    - id: door-closed
+      platform: state
+      entity_id: binary_sensor.ds02_contact
+      from: 'on'
+      to: 'off'
+    - id: door-open
+      platform: state
+      entity_id: binary_sensor.ds02_contact
+      from: 'off'
+      to: 'on'
+  conditions: []
+  actions:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id:
+                - motion-on
+                - door-open
+            - condition: state
+              entity_id: binary_sensor.ds02_contact
+              state: 'on'
+          sequence:
+            - action: light.turn_on
+              target:
+                area_id: laundry
+        - conditions:
+            - condition: trigger
+              id:
+                - motion-of
+                - door-closed
+          sequence:
+            - action: light.turn_off
+              target:
+                area_id: laundry

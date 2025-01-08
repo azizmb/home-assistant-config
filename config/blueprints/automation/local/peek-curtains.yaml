@@ -1,0 +1,44 @@
+blueprint:
+  name: Peek Curtains
+  domain: automation
+  input:
+    occupancy_entity:
+      name: Occupancy
+      description: Occupancy is detected.
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: occupancy
+    cover_target:
+      name: Cover
+      selector:
+        entity:
+          domain:
+            - cover
+    close_delay:
+      name: Time to wait before closing curtains
+      selector:
+        duration:
+      default:
+        minutes: 20
+    trigger:
+
+mode: single
+
+trigger: !input "trigger"
+
+condition:
+  - condition: state
+    entity_id: !input occupancy_entity
+    state: "on"
+
+action:
+  - action: cover.set_cover_position
+    target:
+      entity_id: !input cover_target
+    data:
+        position: 30
+  - delay: !input "close_delay"
+  - action: cover.close_cover
+    target:
+      entity_id: !input cover_target

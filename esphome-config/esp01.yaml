@@ -1,0 +1,129 @@
+esphome:
+  name: esp01
+  friendly_name: ESP01
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "DGwHpok/cflfkz3/tFwVN5+5gkR7SFtWbsan2ZJ7B3E="
+
+ota:
+  - platform: esphome
+    password: "da2c794732a5e1e4b7306de3717c3ad9"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp01 Fallback Hotspot"
+    password: "x4wAHqDZVl05"
+
+captive_portal:
+    
+binary_sensor:
+  - platform: template
+    name: "Bed Left Occupancy"
+    device_class: occupancy
+    id: gb_l
+    lambda: |-
+      if (id(bed_left_sensor).state < id(bed_left_trigger_level).state) {
+        return true;
+      } else {
+        return false;
+      }
+
+  - platform: template
+    name: "Bed Right Occupancy"
+    device_class: occupancy
+    id: gb_r
+    lambda: |-
+      if (id(bed_right_sensor).state < id(bed_right_trigger_level).state) {
+        return true;
+      } else {
+        return false;
+      }
+
+sensor:
+  - platform: adc
+    pin: GPIO34
+    attenuation: 11db
+    name: "Bed Left Sensor"
+    id: "bed_left_sensor"
+    icon: mdi:bed
+    update_interval: 0.5s
+    filters:
+      - sliding_window_moving_average:
+          window_size: 5
+          send_every: 1
+      - or:
+          - throttle: 180s
+          - delta: 0.02
+
+  - platform: adc
+    pin: GPIO32
+    attenuation: 11db
+    name: "Bed Right Sensor"
+    id: "bed_right_sensor"
+    icon: mdi:bed
+    update_interval: 0.5s
+    filters:
+      - sliding_window_moving_average:
+          window_size: 5
+          send_every: 1
+      - or:
+          - throttle: 180s
+          - delta: 0.02
+  
+  - platform: ultrasonic
+    trigger_pin: GPIO1
+    echo_pin: GPIO3
+    name: "Ultrasonic Right Sensor"
+    update_interval: 1s
+
+  - platform: ultrasonic
+    trigger_pin: GPIO17
+    echo_pin: GPIO16
+    name: "Ultrasonic Left Sensor"
+    update_interval: 1s
+
+output:
+    platform: ledc
+    pin: GPIO2
+    id: gpio_2
+    frequency: "1000Hz"
+
+light:
+  - platform: monochromatic
+    output: gpio_2
+    name: "Bed Light"
+    default_transition_length: 500ms
+
+number:
+  - platform: template
+    name: "Left Trigger Level"
+    id: bed_left_trigger_level
+    optimistic: true
+    initial_value: 1.5
+    min_value: 0
+    max_value: 3
+    step: 0.05
+
+  - platform: template
+    name: "Right Trigger Level"
+    id: bed_right_trigger_level
+    optimistic: true
+    initial_value: 1.5
+    min_value: 0
+    max_value: 3
+    step: 0.05
+  

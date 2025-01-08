@@ -1,0 +1,67 @@
+blueprint:
+  name: Zigbee2MQTT - Tuya Moes Smart Switch (Operation Mode = event)
+  description: Automate your Tuya Smart Scene Switch
+  domain: automation
+  input:
+    mode:
+      name: Automation Modes
+      description: https://www.home-assistant.io/docs/automation/modes/
+      default: parallel
+      selector:
+        select:
+          mode: dropdown
+          options:
+          - single
+          - restart
+          - queued
+          - parallel
+          multiple: false
+          sort: false
+          custom_value: false
+    switch:
+      name: Tuya Smart Scene Switch
+      description: Tuya Smart Scene Switch used as Button
+      selector:
+        entity:
+          integration: mqtt
+          domain:
+          - sensor
+          multiple: false
+    button_short_press:
+      name: Single Press
+      description: Action to run on single press (careful not to turn knob instead)
+      default: []
+      selector:
+        action: {}
+    button_double_press:
+      name: Double Press
+      description: Action to run on double press (careful not to turn knob instead)
+      default: []
+      selector:
+        action: {}
+    button_long_press:
+      name: Long Press
+      description: Action to run on long press (at least 4 seconds - careful not to
+        turn knob instead)
+      default: []
+      selector:
+        action: {}
+  source_url: https://gist.github.com/azizmb/365f2f103849561bc6ab70d31478fa4f
+mode: !input mode
+max_exceeded: silent
+trigger:
+- platform: state
+  entity_id: !input switch
+action:
+- variables:
+    command: '{{ trigger.to_state.state }}'
+- choose:
+  - conditions:
+    - '{{ command == ''single'' }}'
+    sequence: !input button_short_press
+  - conditions:
+    - '{{ command == ''double'' }}'
+    sequence: !input button_double_press
+  - conditions:
+    - '{{ command == ''hold'' }}'
+    sequence: !input button_long_press

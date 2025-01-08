@@ -14,9 +14,10 @@ blueprint:
       description:  light on
       name: Light
       selector:
-        target:
-          entity:
-            domain: light
+        entity:
+          domain:
+            - light
+          multiple: true
     no_occupancy_wait:
       name: Wait time
       description: Time to leave the light on after last motion is detected.
@@ -26,35 +27,28 @@ blueprint:
           min: 0
           max: 3600
           unit_of_measurement: seconds
-    flag:
-      name: Enabled Flag
-      description: Toggle that decides whether to run this automation or not.
-      selector:
-        entity:
-          domain: input_boolean
 
-# If motion is detected within the delay,
-# we restart the script.
 mode: restart
 max_exceeded: silent
 
-# automation normaly
 trigger:
   - platform: state
     entity_id: !input occupancy_entity
     from: "off"
     to: "on"
-  - platform: sun
-    event: sunset
 
 condition:
-  - conditions:
-    - condition: sun
-      after: sunset
+  - condition: sun
+    after: sunset
+
+variables:
+  lights: !input "light_target"
 
 action:
   - action: light.turn_on
-    target: !input light_target
+    target:
+      entity_id:
+        !input "light_target"
   - wait_for_trigger:
       platform: state
       entity_id: !input occupancy_entity
@@ -62,4 +56,6 @@ action:
       to: "off"
   - delay: !input no_occupancy_wait
   - action: light.turn_off
-    target: !input light_target
+    target:
+      entity_id:
+        !input "light_target"
