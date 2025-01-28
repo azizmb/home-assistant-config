@@ -56,7 +56,7 @@
         - action: switch.turn_off
           entity_id: switch.wss01_socket_1
         else:
-        - action: switch.turn_off
+        - action: switch.turn_on
           entity_id: script.control_bed_heater
       button_three_double_press:
       - if:
@@ -135,7 +135,7 @@
         - action: switch.turn_off
           entity_id: switch.wss02_socket_1
         else:
-        - action: switch.turn_off
+        - action: switch.turn_on
           entity_id: script.control_bed_heater
       button_four_double_press:
       - if:
