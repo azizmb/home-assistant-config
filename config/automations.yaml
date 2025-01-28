@@ -66,9 +66,6 @@
         then:
         - action: switch.turn_off
           entity_id: switch.wss01_socket_1
-        - action: script.turn_off
-          target:
-            entity_id: script.control_bed_heater
         else:
         - action: script.turn_on
           data:
@@ -145,9 +142,6 @@
         then:
         - action: switch.turn_off
           entity_id: switch.wss02_socket_1
-        - action: script.turn_off
-          target:
-            entity_id: script.control_bed_heater
         else:
         - action: script.turn_on
           data:

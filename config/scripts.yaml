@@ -1,5 +1,6 @@
 control_bed_heater:
   alias: Control bed heater
+  mode: "parallel"
   fields:
     heater:
       selector:
