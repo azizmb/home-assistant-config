@@ -68,5 +68,13 @@ devices:
     friendly_name: '0xa4c1387941d710ee'
   '0xa4c13870c3f8c16f':
     friendly_name: '0xa4c13870c3f8c16f'
+  '0xa4c1381bb53c1b1f':
+    friendly_name: MS01
+  '0xa4c138f0f239bc9f':
+    friendly_name: ZSS3G01
+  '0xa4c1383bd1256b7d':
+    friendly_name: ZSS3G02
+  '0xa4c138d6c7435263':
+    friendly_name: MS08
 external_converters:
   - curtain-bot.js

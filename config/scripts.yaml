@@ -11,9 +11,29 @@ control_bed_heater:
     target:
       entity_id: '{{ heater }}'
   - delay:
-      minutes: 30
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
   - action: switch.turn_off
     target:
       entity_id: '{{ heater }}'
-
-
+bukhur_quick:
+  alias: Bukhur Quick
+  sequence:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      label_id: bukhur
+  - delay:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      label_id: bukhur
+  description: ''
