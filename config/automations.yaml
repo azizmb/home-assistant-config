@@ -55,6 +55,17 @@
         then:
         - action: switch.turn_off
           entity_id: switch.wss01_socket_1
+        else:
+        - action: switch.turn_off
+          entity_id: script.control_bed_heater
+      button_three_double_press:
+      - if:
+        - condition: state
+          entity_id: switch.wss01_socket_1
+          state: 'on'
+        then:
+        - action: switch.turn_off
+          entity_id: switch.wss01_socket_1
         - action: script.turn_off
           target:
             entity_id: script.control_bed_heater
@@ -65,6 +76,7 @@
               heater: switch.wss01_socket_1
           target:
             entity_id: script.control_bed_heater
+
 - id: '1736176998592'
   alias: Bedroom - Bed Controls - Nisrin
   description: ''
@@ -114,22 +126,28 @@
         data: {}
         target:
           entity_id: light.zss02_l1
-      button_three_short_press: []
-      button_three_double_press: []
       button_four_short_press:
       - if:
         - condition: state
-          state: 'on'
           entity_id: switch.wss02_socket_1
+          state: 'on'
         then:
         - action: switch.turn_off
-          data: {}
-          target:
-            device_id: 5de341f4e01cd6ccd2af3946d4a95004
+          entity_id: switch.wss02_socket_1
+        else:
+        - action: switch.turn_off
+          entity_id: script.control_bed_heater
+      button_four_double_press:
+      - if:
+        - condition: state
+          entity_id: switch.wss02_socket_1
+          state: 'on'
+        then:
+        - action: switch.turn_off
+          entity_id: switch.wss02_socket_1
         - action: script.turn_off
           target:
             entity_id: script.control_bed_heater
-          data: {}
         else:
         - action: script.turn_on
           data:
@@ -137,6 +155,7 @@
               heater: switch.wss02_socket_1
           target:
             entity_id: script.control_bed_heater
+
 - id: '1736361188282'
   alias: Bedroom - Lights - Night
   description: ''
@@ -172,6 +191,7 @@
     entity_id: ec0f3ac6e30c6a4234b532c0a52d1df1
     domain: light
   mode: single
+
 - id: '1736361583980'
   alias: Reset Night Mode
   description: ''
@@ -187,6 +207,7 @@
     target:
       label_id: flag_night_mode
   mode: single
+
 - id: '1736361791549'
   alias: Set - Bedroom - Night Mode
   description: ''
@@ -226,24 +247,7 @@
       light_target:
       - light.zss3g02_right
       no_occupancy_wait: 30
-- id: '1736453280269'
-  alias: Global - Bukhur - Magrib
-  description: ''
-  triggers:
-  - trigger: sun
-    event: sunset
-    offset: 00:05:00
-  conditions:
-  - condition: state
-    entity_id: binary_sensor.occupancy_home
-    state: 'on'
-  actions:
-  - action: script.turn_on
-    metadata: {}
-    data: {}
-    target:
-      entity_id: script.bukhur_quick
-  mode: single
+
 - id: '1736503798847'
   alias: Aquarium - Lights
   description: ''
@@ -272,6 +276,7 @@
       data: {}
       target:
         device_id: cdd8a4f42cf5052d2c020771d66c1959
+
   mode: single
 - id: '1736688453558'
   alias: Tag Aquarium Light Heater is scanned

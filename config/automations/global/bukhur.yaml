@@ -1,0 +1,18 @@
+- id: '1736453280269'
+  alias: Global - Bukhur - Magrib
+  description: ''
+  triggers:
+  - trigger: sun
+    event: sunset
+    offset: 00:05:00
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.occupancy_home
+    state: 'on'
+  actions:
+  - action: script.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: script.bukhur_quick
+  mode: single
