@@ -10,3 +10,5 @@ automation: !include automations.yaml
 automation mine: !include_dir_merge_list ./automations
 script: !include scripts.yaml
 scene: !include scenes.yaml
+
+template: !include_dir_merge_list ./sensors/template

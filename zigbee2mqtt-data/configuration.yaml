@@ -80,5 +80,13 @@ devices:
     friendly_name: Curtains - Living Room - Side
   '0x8c65a3fffec7aa3f':
     friendly_name: ' WSS01'
+  '0xa4c138b425c8d288':
+    friendly_name: ZSM01
+  '0xa4c13815f5f4d4da':
+    friendly_name: THS01
+  '0x70b3d52b600a7ce1':
+    friendly_name: ZSP01
+  '0xa4c138e1353a8e8e':
+    friendly_name: PS02
 external_converters:
   - curtain-bot.js

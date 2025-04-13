@@ -1,0 +1,65 @@
+- sensor:
+    - name: "Average Temperature - Bedroom"
+      unit_of_measurement: "°C"
+      state: >
+        {% set area = "Bedroom" %}
+        {% set temps = states.sensor
+          | selectattr('attributes.device_class', 'equalto', 'temperature')
+          | selectattr('entity_id', 'ne', this.entity_id)
+          | rejectattr('state', 'in', ['unavailable', 'unknown', '0'])
+          | selectattr('state', 'is_number')
+          | selectattr('entity_id', 'in', area_entities(area))
+          | map(attribute='state') | map('float') | list %}
+        {% if temps | length > 0 %}
+          {{ (temps | sum) / (temps | length) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Average Humidity - Bedroom"
+      unit_of_measurement: "%"
+      state: >
+        {% set area = "Bedroom" %}
+        {% set humidities = states.sensor
+          | selectattr('attributes.device_class', 'equalto', 'humidity')
+          | selectattr('entity_id', 'ne', this.entity_id)
+          | rejectattr('state', 'in', ['unavailable', 'unknown', '0'])
+          | selectattr('state', 'is_number')
+          | selectattr('entity_id', 'in', area_entities(area))
+          | map(attribute='state') | map('float') | list %}
+        {% if humidities | length > 0 %}
+          {{ (humidities | sum) / (humidities | length) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+- binary_sensor:
+    - name: "Occupancy - Bedroom"
+      device_class: occupancy
+      state: >
+        {% set area = "Bedroom" %}
+        {% set sensors = expand(area_entities(area))
+          | selectattr('domain', 'equalto', 'binary_sensor')
+          | selectattr('attributes.device_class', 'in', ['motion', 'occupancy']) %}
+        {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+- button:
+    - name: "Occupancy Lights - Bedroom"
+      icon: mdi:lightbulb-group
+      state: >
+        {% set area = 'Bedroom' %}
+        {% set lights = area_entities(area)
+          | select('match', '^light\\.')
+          | select('in', states.light | selectattr('name', 'search', 'Occupancy Lights') | map(attribute='entity_id') | list)
+          | list %}
+        {{ 'on' if lights | select('in', states.light | selectattr('state', 'equalto', 'on') | map(attribute='entity_id') | list) | list | count > 0 else 'off' }}
+      press:
+        service: homeassistant.toggle
+        data:
+          entity_id: >
+            {% set area = 'Bedroom' %}
+            {% set lights = area_entities(area)
+              | select('match', '^light\\.')
+              | select('in', states.light | selectattr('name', 'search', 'Occupancy Lights') | map(attribute='entity_id') | list)
+              | list %}
+            {{ lights | join(', ') }}

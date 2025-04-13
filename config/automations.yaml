@@ -124,34 +124,8 @@
         data: {}
         target:
           entity_id: light.zss02_l1
-      button_four_short_press:
-      - if:
-        - condition: state
-          entity_id: switch.wss02_socket_1
-          state: 'on'
-        then:
-        - action: switch.turn_off
-          entity_id: switch.wss02_socket_1
-        else:
-        - action: switch.turn_on
-          data: {}
-          target:
-            entity_id: switch.wss02_socket_1
-      button_four_double_press:
-      - if:
-        - condition: state
-          entity_id: switch.wss02_socket_1
-          state: 'on'
-        then:
-        - action: switch.turn_off
-          entity_id: switch.wss02_socket_1
-        else:
-        - action: script.turn_on
-          data:
-            variables:
-              heater: switch.wss02_socket_1
-          target:
-            entity_id: script.control_bed_heater
+      button_four_short_press: []
+      button_four_double_press: []
 - id: '1736361188282'
   alias: Bedroom - Lights - Night
   description: ''
@@ -299,4 +273,228 @@
     data: {}
     target:
       device_id: cdd8a4f42cf5052d2c020771d66c1959
+  mode: single
+- id: '1740226912912'
+  alias: Living Room - WSS
+  description: ''
+  use_blueprint:
+    path: local/ts004-wss.yaml
+    input:
+      switch:
+      - sensor.wss01_action
+      button_one_short_press: []
+      button_one_double_press: []
+      button_two_short_press:
+      - type: toggle
+        device_id: ecd5da59723eab053cf22186ab31e5d0
+        entity_id: 3ab01da1e53eba62b7e1abae0920a44f
+        domain: light
+      button_three_short_press:
+      - action: cover.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.curtains_living_room_side
+      button_three_double_press:
+      - action: cover.set_cover_position
+        metadata: {}
+        data:
+          position: 50
+        target:
+          device_id: f7f43e4a623838e8bc0563300571e576
+      button_four_short_press:
+      - action: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.living_room_grow_lights
+- id: '1740585505258'
+  alias: Grow Lights
+  description: ''
+  triggers:
+  - trigger: sun
+    event: sunrise
+    offset: '3'
+    id: sunrise
+  - trigger: sun
+    event: sunset
+    offset: 0
+    id: sunset
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - sunrise
+      sequence:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          label_id: grow_lights
+    - conditions:
+      - condition: trigger
+        id:
+        - sunset
+      sequence:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          label_id: grow_lights
+  mode: single
+- id: '1740585724620'
+  alias: Grow Lab - Fans
+  description: ''
+  triggers:
+  - trigger: time_pattern
+    minutes: '10'
+    id: start
+  - trigger: time_pattern
+    minutes: '14'
+    id: stop
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - start
+      sequence:
+      - type: turn_on
+        device_id: 3842f9da654631e6ee3802d56bb779c2
+        entity_id: 73f28fac90af8eeaafd08bf2bef49f2d
+        domain: switch
+    - conditions:
+      - condition: trigger
+        id:
+        - stop
+      sequence:
+      - type: turn_off
+        device_id: 3842f9da654631e6ee3802d56bb779c2
+        entity_id: 73f28fac90af8eeaafd08bf2bef49f2d
+        domain: switch
+  mode: single
+- id: '1740915184838'
+  alias: Tag Living Room Plant Stand Lights is scanned
+  description: ''
+  triggers:
+  - trigger: tag
+    tag_id: 0d5f3fec-48f6-4590-bf3e-45df7f6f9882
+  conditions: []
+  actions:
+  - action: light.toggle
+    metadata: {}
+    data: {}
+    target:
+      device_id: 5de341f4e01cd6ccd2af3946d4a95004
+  mode: single
+- id: '1741382226786'
+  alias: Tag Living Room Corner Grow Light is scanned
+  description: ''
+  triggers:
+  - trigger: tag
+    tag_id: 32a181ed-0284-4efc-b3f0-f6b3e0fc94ff
+  conditions: []
+  actions:
+  - action: light.toggle
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.wss03_socket_1
+  mode: single
+- id: '1741383046471'
+  alias: Tag Aquarium Corner Grow Light is scanned
+  description: ''
+  triggers:
+  - trigger: tag
+    tag_id: 438ab4d2-99ca-4d1d-a46f-8dae67ded75b
+  conditions: []
+  actions:
+  - action: light.toggle
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.sp10_living_room_plant_light_socket_1
+  mode: single
+- id: '1742032071122'
+  alias: Bedroom - Night Mode Auto
+  description: ''
+  triggers:
+  - trigger: time
+    at: '21:00:00'
+    id: night-start
+  - trigger: time
+    at: 08:00:00
+    id: night-end
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - night-start
+      sequence:
+      - action: fan.set_preset_mode
+        metadata: {}
+        data:
+          preset_mode: sleep
+        target:
+          device_id: 1bbb1dd386f9e9cf8913340e37688881
+    - conditions:
+      - condition: trigger
+        id:
+        - night-end
+      sequence:
+      - action: fan.set_preset_mode
+        metadata: {}
+        data:
+          preset_mode: auto
+        target:
+          device_id: 1bbb1dd386f9e9cf8913340e37688881
+  mode: single
+- id: '1742032398627'
+  alias: Bedroom - Clean air when room empty
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.occupancy_bedroom
+    from: 'on'
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+    id: room-empty
+  conditions:
+  - condition: state
+    entity_id: fan.master_bedroom_air_purifier
+    attribute: preset_mode
+    state: auto
+  actions:
+  - action: fan.set_percentage
+    metadata: {}
+    data:
+      percentage: 100
+    target:
+      device_id: 1bbb1dd386f9e9cf8913340e37688881
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.occupancy_bedroom
+      from:
+      to: 'on'
+    timeout:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
+  - action: fan.set_preset_mode
+    metadata: {}
+    data:
+      preset_mode: auto
+    target:
+      device_id: 1bbb1dd386f9e9cf8913340e37688881
   mode: single
