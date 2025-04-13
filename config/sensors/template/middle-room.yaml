@@ -1,18 +1,16 @@
-# Mom's Room sensors
+# Middle Room sensors
 - sensor:
-  - name: "Average Temperature - Mom's Room"
+  - name: "Average Temperature - Middle Room"
     unit_of_measurement: "°C"
     state: >
-
-      {% set area = 'Mom's Room' %}
+      {% set area = 'Middle Room' %}
       {% set temps = states.sensor
         | selectattr('attributes.device_class', 'equalto', 'temperature')
         | selectattr('entity_id', 'ne', this.entity_id)
         | rejectattr('state', 'in', ['unavailable', 'unknown', '0'])
         | selectattr('state', 'is_number')
         | selectattr('entity_id', 'in', area_entities(area))
-        | selectattr('device_id', 'defined')
-        | selectattr('device_id', 'in', states.device_labels['sensor'] | map(attribute='device_id') | list)
+        | selectattr('entity_id', 'in', label_entities('Sensor'))
         | map(attribute='state') | map('float') | list %}
       {% if temps | length > 0 %}
         {{ (temps | sum) / (temps | length) }}
@@ -20,19 +18,17 @@
         unknown
       {% endif %}
 
-  - name: "Average Humidity - Mom's Room"
+  - name: "Average Humidity - Middle Room"
     unit_of_measurement: "%"
     state: >
-
-      {% set area = 'Mom's Room' %}
+      {% set area = 'Middle Room' %}
       {% set humidities = states.sensor
         | selectattr('attributes.device_class', 'equalto', 'humidity')
         | selectattr('entity_id', 'ne', this.entity_id)
         | rejectattr('state', 'in', ['unavailable', 'unknown', '0'])
         | selectattr('state', 'is_number')
         | selectattr('entity_id', 'in', area_entities(area))
-        | selectattr('device_id', 'defined')
-        | selectattr('device_id', 'in', states.device_labels['sensor'] | map(attribute='device_id') | list)
+        | selectattr('entity_id', 'in', label_entities('Sensor'))
         | map(attribute='state') | map('float') | list %}
       {% if humidities | length > 0 %}
         {{ (humidities | sum) / (humidities | length) }}
@@ -41,11 +37,10 @@
       {% endif %}
 
 - binary_sensor:
-  - name: "Occupancy - Mom's Room"
+  - name: "Occupancy - Middle Room"
     device_class: occupancy
     state: >
-
-      {% set area = 'Mom's Room' %}
+      {% set area = 'Middle Room' %}
       {% set sensors = expand(area_entities(area))
         | selectattr('domain', 'equalto', 'binary_sensor')
         | selectattr('attributes.device_class', 'in', ['motion', 'occupancy']) %}

@@ -9,7 +9,7 @@ rooms = [
     "Living Room",
     "Bedroom",
     "Kitchen",
-    "Mom's Room"
+    "Middle Room"
 ]
 
 template_file = "sensors-template.j2"
