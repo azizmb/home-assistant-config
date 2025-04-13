@@ -1,7 +1,9 @@
+# Living Room sensors
 - sensor:
     - name: "Average Temperature - Living Room"
       unit_of_measurement: "°C"
       state: >
+
         {% set area = 'Living Room' %}
         {% set temps = states.sensor
           | selectattr('attributes.device_class', 'equalto', 'temperature')
@@ -9,6 +11,8 @@
           | rejectattr('state', 'in', ['unavailable', 'unknown', '0'])
           | selectattr('state', 'is_number')
           | selectattr('entity_id', 'in', area_entities(area))
+          | selectattr('device_id', 'defined')
+          | selectattr('device_id', 'in', states.device_labels['sensor'] | map(attribute='device_id') | list)
           | map(attribute='state') | map('float') | list %}
         {% if temps | length > 0 %}
           {{ (temps | sum) / (temps | length) }}
@@ -19,6 +23,7 @@
     - name: "Average Humidity - Living Room"
       unit_of_measurement: "%"
       state: >
+
         {% set area = 'Living Room' %}
         {% set humidities = states.sensor
           | selectattr('attributes.device_class', 'equalto', 'humidity')
@@ -26,6 +31,8 @@
           | rejectattr('state', 'in', ['unavailable', 'unknown', '0'])
           | selectattr('state', 'is_number')
           | selectattr('entity_id', 'in', area_entities(area))
+          | selectattr('device_id', 'defined')
+          | selectattr('device_id', 'in', states.device_labels['sensor'] | map(attribute='device_id') | list)
           | map(attribute='state') | map('float') | list %}
         {% if humidities | length > 0 %}
           {{ (humidities | sum) / (humidities | length) }}
@@ -37,29 +44,9 @@
     - name: "Occupancy - Living Room"
       device_class: occupancy
       state: >
+
         {% set area = 'Living Room' %}
         {% set sensors = expand(area_entities(area))
           | selectattr('domain', 'equalto', 'binary_sensor')
           | selectattr('attributes.device_class', 'in', ['motion', 'occupancy']) %}
         {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
-
-- button:
-    - name: "Occupancy Lights - Living Room"
-      icon: mdi:lightbulb-group
-      state: >
-        {% set area = 'Living Room' %}
-        {% set lights = area_entities(area)
-          | select('match', '^light\\.')
-          | select('in', states.light | selectattr('name', 'search', 'Occupancy Lights') | map(attribute='entity_id') | list)
-          | list %}
-        {{ 'on' if lights | select('in', states.light | selectattr('state', 'equalto', 'on') | map(attribute='entity_id') | list) | list | count > 0 else 'off' }}
-      press:
-        service: homeassistant.toggle
-        data:
-          entity_id: >
-            {% set area = 'Living Room' %}
-            {% set lights = area_entities(area)
-              | select('match', '^light\\.')
-              | select('in', states.light | selectattr('name', 'search', 'Occupancy Lights') | map(attribute='entity_id') | list)
-              | list %}
-            {{ lights | join(', ') }}

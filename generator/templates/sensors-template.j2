@@ -1,10 +1,10 @@
-# Bedroom sensors
+# {{ room }} sensors
 - sensor:
-    - name: "Average Temperature - Bedroom"
+    - name: "Average Temperature - {{ room }}"
       unit_of_measurement: "°C"
       state: >
-
-        {% set area = 'Bedroom' %}
+        {% raw %}
+        {% set area = {% endraw %}'{{ room }}'{% raw %} %}
         {% set temps = states.sensor
           | selectattr('attributes.device_class', 'equalto', 'temperature')
           | selectattr('entity_id', 'ne', this.entity_id)
@@ -19,12 +19,13 @@
         {% else %}
           unknown
         {% endif %}
+        {% endraw %}
 
-    - name: "Average Humidity - Bedroom"
+    - name: "Average Humidity - {{ room }}"
       unit_of_measurement: "%"
       state: >
-
-        {% set area = 'Bedroom' %}
+        {% raw %}
+        {% set area = {% endraw %}'{{ room }}'{% raw %} %}
         {% set humidities = states.sensor
           | selectattr('attributes.device_class', 'equalto', 'humidity')
           | selectattr('entity_id', 'ne', this.entity_id)
@@ -39,14 +40,16 @@
         {% else %}
           unknown
         {% endif %}
+        {% endraw %}
 
 - binary_sensor:
-    - name: "Occupancy - Bedroom"
+    - name: "Occupancy - {{ room }}"
       device_class: occupancy
       state: >
-
-        {% set area = 'Bedroom' %}
+        {% raw %}
+        {% set area = {% endraw %}'{{ room }}'{% raw %} %}
         {% set sensors = expand(area_entities(area))
           | selectattr('domain', 'equalto', 'binary_sensor')
           | selectattr('attributes.device_class', 'in', ['motion', 'occupancy']) %}
         {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+        {% endraw %}
