@@ -308,42 +308,7 @@
         data: {}
         target:
           entity_id: light.living_room_grow_lights
-- id: '1740585505258'
-  alias: Grow Lights
-  description: ''
-  triggers:
-  - trigger: sun
-    event: sunrise
-    offset: '3'
-    id: sunrise
-  - trigger: sun
-    event: sunset
-    offset: 0
-    id: sunset
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - sunrise
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          label_id: grow_lights
-    - conditions:
-      - condition: trigger
-        id:
-        - sunset
-      sequence:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          label_id: grow_lights
-  mode: single
+
 - id: '1740585724620'
   alias: Grow Lab - Fans
   description: ''
@@ -376,6 +341,7 @@
         entity_id: 73f28fac90af8eeaafd08bf2bef49f2d
         domain: switch
   mode: single
+
 - id: '1740915184838'
   alias: Tag Living Room Plant Stand Lights is scanned
   description: ''
@@ -454,6 +420,7 @@
         target:
           device_id: 1bbb1dd386f9e9cf8913340e37688881
   mode: single
+
 - id: '1742032398627'
   alias: Bedroom - Clean air when room empty
   description: ''
@@ -469,6 +436,9 @@
       seconds: 0
     id: room-empty
   conditions:
+  - condition: template
+    value_template: >
+      {{ (as_timestamp(now()) - as_timestamp(this.attributes.last_triggered or 0)) > 10800 }}
   - condition: state
     entity_id: fan.master_bedroom_air_purifier
     attribute: preset_mode
