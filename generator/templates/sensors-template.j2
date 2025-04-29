@@ -39,12 +39,12 @@
       {% endraw %}
 
 - binary_sensor:
-  - name: "Occupancy - {{ room }}"
-    device_class: occupancy
-    state: >{% raw %}
-      {% set area = {% endraw %}'{{ room }}'{% raw %} %}
-      {% set sensors = expand(area_entities(area))
-        | selectattr('domain', 'equalto', 'binary_sensor')
-        | selectattr('attributes.device_class', 'in', ['motion', 'occupancy']) %}
-      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
-      {% endraw %}
+    - name: "Occupancy - {{ room }}"
+      device_class: occupancy
+      state: >{% raw %}
+        {% set area = {% endraw %}'{{ room }}'{% raw %} %}
+        {% set sensors = expand(area_entities(area))
+          | selectattr('domain', 'equalto', 'binary_sensor')
+          | selectattr('attributes.device_class', 'in', ['motion', 'occupancy', 'presence']) %}
+        {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+        {% endraw %}

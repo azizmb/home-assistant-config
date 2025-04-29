@@ -27,18 +27,19 @@ mode: single
 
 trigger: !input "trigger"
 
-condition:
-  - condition: state
-    entity_id: !input occupancy_entity
-    state: "on"
-
 action:
-  - action: cover.set_cover_position
-    target:
-      entity_id: !input cover_target
-    data:
-        position: 30
-  - delay: !input "close_delay"
-  - action: cover.close_cover
+  - choose:
+      - conditions:
+          - condition: state
+            entity_id: !input occupancy_entity
+            state: "on"
+        sequence:
+          - service: cover.set_cover_position
+            target:
+              entity_id: !input cover_target
+            data:
+              position: 30
+          - delay: !input close_delay
+  - service: cover.close_cover
     target:
       entity_id: !input cover_target

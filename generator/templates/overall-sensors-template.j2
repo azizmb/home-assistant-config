@@ -1,15 +1,12 @@
-# Living Room sensors
 - sensor:
-  - name: "Average Temperature - Living Room"
+  - name: "Average Temperature"
     unit_of_measurement: "°C"
-    state: >
-      {% set area = 'Living Room' %}
+    state: >{% raw %}
       {% set temps = states.sensor
         | selectattr('attributes.device_class', 'equalto', 'temperature')
         | selectattr('entity_id', 'ne', this.entity_id)
         | rejectattr('state', 'in', ['unavailable', 'unknown', '0'])
         | selectattr('state', 'is_number')
-        | selectattr('entity_id', 'in', area_entities(area))
         | selectattr('entity_id', 'in', label_entities('Sensor'))
         | map(attribute='state') | map('float') | list %}
       {% if temps | length > 0 %}
@@ -17,17 +14,16 @@
       {% else %}
         unknown
       {% endif %}
+      {% endraw %}
 
-  - name: "Average Humidity - Living Room"
+  - name: "Average Humidity"
     unit_of_measurement: "%"
-    state: >
-      {% set area = 'Living Room' %}
+    state: >{% raw %}
       {% set humidities = states.sensor
         | selectattr('attributes.device_class', 'equalto', 'humidity')
         | selectattr('entity_id', 'ne', this.entity_id)
         | rejectattr('state', 'in', ['unavailable', 'unknown', '0'])
         | selectattr('state', 'is_number')
-        | selectattr('entity_id', 'in', area_entities(area))
         | selectattr('entity_id', 'in', label_entities('Sensor'))
         | map(attribute='state') | map('float') | list %}
       {% if humidities | length > 0 %}
@@ -35,13 +31,4 @@
       {% else %}
         unknown
       {% endif %}
-
-- binary_sensor:
-    - name: "Occupancy - Living Room"
-      device_class: occupancy
-      state: >
-        {% set area = 'Living Room' %}
-        {% set sensors = expand(area_entities(area))
-          | selectattr('domain', 'equalto', 'binary_sensor')
-          | selectattr('attributes.device_class', 'in', ['motion', 'occupancy', 'presence']) %}
-        {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+      {% endraw %}

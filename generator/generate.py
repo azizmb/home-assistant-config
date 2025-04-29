@@ -12,7 +12,6 @@ rooms = [
     "Middle Room"
 ]
 
-template_file = "sensors-template.j2"
 config_dir = "config"
 
 # Setup
@@ -21,11 +20,17 @@ env = Environment(loader=FileSystemLoader(os.path.join(BASE_DIR, "generator", "t
                   trim_blocks=True,
                   lstrip_blocks=True)
 
-template = env.get_template(template_file)
 
 output_dir = os.path.join(config_dir, "sensors", "template")
 os.makedirs(output_dir, exist_ok=True)
 
+# Generate overall files
+filename = os.path.join(output_dir, "overall.yaml")
+template = env.get_template("overall-sensors-template.j2")
+with open(filename, "w") as f:
+    f.write(template.render())
+
+template = env.get_template("sensors-template.j2")
 # Generate files
 for room in rooms:
     slug = re.sub(r"[^\w\s-]", "", room).lower().replace(" ", "-")

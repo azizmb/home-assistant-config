@@ -37,11 +37,11 @@
       {% endif %}
 
 - binary_sensor:
-  - name: "Occupancy - Kitchen"
-    device_class: occupancy
-    state: >
-      {% set area = 'Kitchen' %}
-      {% set sensors = expand(area_entities(area))
-        | selectattr('domain', 'equalto', 'binary_sensor')
-        | selectattr('attributes.device_class', 'in', ['motion', 'occupancy']) %}
-      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+    - name: "Occupancy - Kitchen"
+      device_class: occupancy
+      state: >
+        {% set area = 'Kitchen' %}
+        {% set sensors = expand(area_entities(area))
+          | selectattr('domain', 'equalto', 'binary_sensor')
+          | selectattr('attributes.device_class', 'in', ['motion', 'occupancy', 'presence']) %}
+        {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
