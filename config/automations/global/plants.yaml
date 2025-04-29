@@ -3,7 +3,6 @@
   mode: single
   variables:
     max_attempts: 5
-
   trigger:
     - platform: sun
       event: sunrise
@@ -12,10 +11,26 @@
     - platform: sun
       event: sunset
       id: turn_off
-
   condition: []
-
   action:
+    - variables:
+        labeled_devices: "{{ label_devices('Grow Lights') }}"
+        device_light_entities: >
+          {{ labeled_devices
+               | map('device_entities')
+               | sum(start=[])
+               | map('expand')
+               | sum(start=[])
+               | selectattr('domain', 'eq', 'light')
+               | map(attribute='entity_id')
+               | list }}
+        labeled_entities: >
+          {{ expand(label_entities('Grow Lights'))
+               | selectattr('domain', 'eq', 'light')
+               | map(attribute='entity_id')
+               | list }}
+        grow_light_entities: >
+          {{ (device_light_entities + labeled_entities) | unique }}
     - choose:
         - conditions:
             - condition: trigger
@@ -27,24 +42,23 @@
                   - service: light.turn_on
                     target:
                       entity_id: >
-                        {{ expand(label_entities('grow light'))
-                          | selectattr('state', 'eq', 'off')
-                          | map(attribute='entity_id')
-                          | list }}
+                        {{ expand(grow_light_entities)
+                           | selectattr('state', 'eq', 'off')
+                           | map(attribute='entity_id')
+                           | list }}
                   - wait_template: >
-                      {{ expand(label_entities('grow light'))
-                        | selectattr('state', 'eq', 'on')
-                        | list | count == expand(label_entities('grow light')) | count }}
+                      {{ expand(grow_light_entities)
+                           | selectattr('state', 'eq', 'on')
+                           | list | count == grow_light_entities | count }}
                     timeout: "0:00:10"
                     continue_on_timeout: true
                   - condition: template
                     value_template: >
-                      {{ expand(label_entities('grow light'))
-                        | selectattr('state', 'eq', 'on')
-                        | list | count == expand(label_entities('grow light')) | count }}
+                      {{ expand(grow_light_entities)
+                           | selectattr('state', 'eq', 'on')
+                           | list | count == grow_light_entities | count }}
                   - stop: "All grow lights are on."
                   - delay: "00:05:00"
-
         - conditions:
             - condition: trigger
               id: turn_off
@@ -55,20 +69,20 @@
                   - service: light.turn_off
                     target:
                       entity_id: >
-                        {{ expand(label_entities('grow light'))
-                          | selectattr('state', 'eq', 'on')
-                          | map(attribute='entity_id')
-                          | list }}
+                        {{ expand(grow_light_entities)
+                           | selectattr('state', 'eq', 'on')
+                           | map(attribute='entity_id')
+                           | list }}
                   - wait_template: >
-                      {{ expand(label_entities('grow light'))
-                        | selectattr('state', 'eq', 'off')
-                        | list | count == expand(label_entities('grow light')) | count }}
+                      {{ expand(grow_light_entities)
+                           | selectattr('state', 'eq', 'off')
+                           | list | count == grow_light_entities | count }}
                     timeout: "0:00:10"
                     continue_on_timeout: true
                   - condition: template
                     value_template: >
-                      {{ expand(label_entities('grow light'))
-                        | selectattr('state', 'eq', 'off')
-                        | list | count == expand(label_entities('grow light')) | count }}
+                      {{ expand(grow_light_entities)
+                           | selectattr('state', 'eq', 'off')
+                           | list | count == grow_light_entities | count }}
                   - stop: "All grow lights are off."
                   - delay: "00:05:00"
