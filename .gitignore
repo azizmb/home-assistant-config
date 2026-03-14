@@ -1,14 +1,46 @@
+# Editor
 .vscode/
 
+# Logs
 *.log
 *.log.*
 logs/
 log/
 
-*.db*
-.storage
+# Databases
+*.db
+*.db-shm
+*.db-wal
 
-data/
+# Home Assistant generated (NEVER deploy these)
+.storage/
+.cloud/
+deps/
+tts/
+__pycache__/
+.HA_VERSION
+home-assistant.log*
 
+# HACS & custom components (managed separately)
+custom_components/
+www/community/
+image/
+
+# Zigbee2MQTT state files
 zigbee2mqtt-data/coordinator_backup.json
 zigbee2mqtt-data/state.json
+zigbee2mqtt-data/database.db
+zigbee2mqtt-data/log/
+
+# ESPHome build cache
+esphome-config/.esphome/
+esphome-config/.venv/
+esphome-config/secrets.yaml
+
+# Mosquitto data
+mosquitto-data/
+
+# Secrets & environment
+.env
+# Uncomment below when you add real secrets:
+# config/secrets.yaml

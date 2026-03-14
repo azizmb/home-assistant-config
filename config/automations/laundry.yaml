@@ -4,33 +4,27 @@
   mode: single
   triggers:
     - entity_id:
-        - binary_sensor.ms03_occupancy
+        - binary_sensor.moving_presence_laundry
       from: "off"
       to: "on"
-      for:
-        hours: 0
-        minutes: 0
-        seconds: 0
       id: motion-on
       trigger: state
     - entity_id:
-        - binary_sensor.ms03_occupancy
+        - binary_sensor.moving_presence_laundry
       from: "on"
       to: "off"
       for:
-        hours: 0
-        minutes: 0
         seconds: 10
-      id: motion-of
+      id: motion-off
       trigger: state
     - id: door-closed
       platform: state
-      entity_id: binary_sensor.ds02_contact
+      entity_id: binary_sensor.z_dr_01_contact
       from: 'on'
       to: 'off'
     - id: door-open
       platform: state
-      entity_id: binary_sensor.ds02_contact
+      entity_id: binary_sensor.z_dr_01_contact
       from: 'off'
       to: 'on'
   conditions: []
@@ -42,7 +36,7 @@
                 - motion-on
                 - door-open
             - condition: state
-              entity_id: binary_sensor.ds02_contact
+              entity_id: binary_sensor.z_dr_01_contact
               state: 'on'
           sequence:
             - action: light.turn_on
@@ -51,7 +45,7 @@
         - conditions:
             - condition: trigger
               id:
-                - motion-of
+                - motion-off
                 - door-closed
           sequence:
             - action: light.turn_off

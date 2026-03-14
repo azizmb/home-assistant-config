@@ -1,0 +1,158 @@
+# Bedroom bed controls - wireless buttons for Aziz and Nisrin
+# Button 1: Bed light (light.esp01_bed_light)
+# Button 2: Window Light (switch.z_sw2g_01_l1)
+# Single press: Smart toggle (dim after 22:00 or when projector on)
+# Double press: Cycle brightness 25% → 50% → 75% → 100% → 25%
+# Long press: Turn off all bedroom lights
+
+- id: "1736176173682"
+  alias: Bedroom - Bed Controls - Aziz
+  mode: restart
+  max_exceeded: silent
+  trigger:
+    - platform: mqtt
+      topic: zigbee2mqtt/Z-RC4-01
+  action:
+    - variables:
+        command: "{{ trigger.payload_json.action }}"
+    - choose:
+      # Button 1 - Bed Light
+      - conditions: "{{ command == '1_single' }}"
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: light.esp01_bed_light
+                    state: "off"
+                sequence:
+                  - action: light.turn_on
+                    target:
+                      entity_id: light.esp01_bed_light
+                    data:
+                      brightness_pct: >
+                        {% if now().hour >= 22 or now().hour < 6 or states('media_player.p') != 'off' %}
+                          20
+                        {% else %}
+                          100
+                        {% endif %}
+                      transition: 1
+            default:
+              - action: light.turn_off
+                target:
+                  entity_id: light.esp01_bed_light
+                data:
+                  transition: 1
+      - conditions: "{{ command == '1_double' }}"
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.esp01_bed_light
+            data:
+              brightness_pct: >
+                {% set current = state_attr('light.esp01_bed_light', 'brightness') | default(0) %}
+                {% set pct = (current / 255 * 100) | round %}
+                {% if pct < 25 %}25
+                {% elif pct < 50 %}50
+                {% elif pct < 75 %}75
+                {% elif pct < 100 %}100
+                {% else %}25{% endif %}
+              transition: 0.5
+      - conditions: "{{ command == '1_hold' }}"
+        sequence:
+          - action: light.turn_off
+            target:
+              area_id: bedroom
+            data:
+              transition: 1
+      # Button 2 - Window Light
+      - conditions: "{{ command == '2_single' }}"
+        sequence:
+          - action: switch.toggle
+            target:
+              entity_id: switch.z_sw2g_01_l1
+      - conditions: "{{ command == '2_hold' }}"
+        sequence:
+          - action: light.turn_off
+            target:
+              area_id: bedroom
+            data:
+              transition: 1
+          - action: switch.turn_off
+            target:
+              area_id: bedroom
+
+- id: "1736176998592"
+  alias: Bedroom - Bed Controls - Nisrin
+  mode: restart
+  max_exceeded: silent
+  trigger:
+    - platform: mqtt
+      topic: zigbee2mqtt/Z-RC4-03
+  action:
+    - variables:
+        command: "{{ trigger.payload_json.action }}"
+    - choose:
+      # Button 1 - Bed Light
+      - conditions: "{{ command == '1_single' }}"
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: light.esp01_bed_light
+                    state: "off"
+                sequence:
+                  - action: light.turn_on
+                    target:
+                      entity_id: light.esp01_bed_light
+                    data:
+                      brightness_pct: >
+                        {% if now().hour >= 22 or now().hour < 6 or states('media_player.p') != 'off' %}
+                          20
+                        {% else %}
+                          100
+                        {% endif %}
+                      transition: 1
+            default:
+              - action: light.turn_off
+                target:
+                  entity_id: light.esp01_bed_light
+                data:
+                  transition: 1
+      - conditions: "{{ command == '1_double' }}"
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.esp01_bed_light
+            data:
+              brightness_pct: >
+                {% set current = state_attr('light.esp01_bed_light', 'brightness') | default(0) %}
+                {% set pct = (current / 255 * 100) | round %}
+                {% if pct < 25 %}25
+                {% elif pct < 50 %}50
+                {% elif pct < 75 %}75
+                {% elif pct < 100 %}100
+                {% else %}25{% endif %}
+              transition: 0.5
+      - conditions: "{{ command == '1_hold' }}"
+        sequence:
+          - action: light.turn_off
+            target:
+              area_id: bedroom
+            data:
+              transition: 1
+      # Button 2 - Window Light
+      - conditions: "{{ command == '2_single' }}"
+        sequence:
+          - action: switch.toggle
+            target:
+              entity_id: switch.z_sw2g_01_l1
+      - conditions: "{{ command == '2_hold' }}"
+        sequence:
+          - action: light.turn_off
+            target:
+              area_id: bedroom
+            data:
+              transition: 1
+          - action: switch.turn_off
+            target:
+              area_id: bedroom

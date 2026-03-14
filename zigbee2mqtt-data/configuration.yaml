@@ -41,7 +41,7 @@ devices:
   '0xa4c13868cfe333f7':
     friendly_name: DS02
   '0xa4c138015e42e643':
-    friendly_name: WSS04
+    friendly_name: WB-4G-02
   '0xa4c1380fbcbfaae9':
     friendly_name: MS04
   '0xa4c1388700fdf966':
@@ -51,7 +51,7 @@ devices:
   '0xa4c138ffcb285131':
     friendly_name: PS03
   '0xa4c138cb0365aa9d':
-    friendly_name: WSS05
+    friendly_name: WB-4G-01
   '0xa4c1384b195eaec6':
     friendly_name: MS02
   '0xa4c138c33628f3cb':
@@ -85,7 +85,7 @@ devices:
   '0xa4c13815f5f4d4da':
     friendly_name: THS01
   '0x70b3d52b600a7ce1':
-    friendly_name: ZSP01
+    friendly_name: Z-PLG-01
   '0xa4c138e1353a8e8e':
     friendly_name: PS02
   '0xa4c1383c8ea2bb96':

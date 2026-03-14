@@ -1,0 +1,95 @@
+# Bedroom air quality automations - air purifier control
+
+- id: "1742032071122"
+  alias: Bedroom - Air Purifier - Night Mode
+  mode: single
+  triggers:
+    - trigger: time
+      at: "21:00:00"
+      id: night-start
+    - trigger: time
+      at: "08:00:00"
+      id: night-end
+  conditions: []
+  actions:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: night-start
+          sequence:
+            - action: fan.set_preset_mode
+              data:
+                preset_mode: sleep
+              target:
+                entity_id: fan.master_bedroom_air_purifier
+        - conditions:
+            - condition: trigger
+              id: night-end
+          sequence:
+            - action: fan.set_preset_mode
+              data:
+                preset_mode: auto
+              target:
+                entity_id: fan.master_bedroom_air_purifier
+
+- id: "1742032398627"
+  alias: Bedroom - Air Purifier - Clean When Empty
+  mode: single
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.presence_bedroom
+      from: "on"
+      to: "off"
+      for:
+        minutes: 10
+      id: room-empty
+  conditions:
+    - condition: template
+      value_template: >
+        {{ (as_timestamp(now()) - as_timestamp(this.attributes.last_triggered or 0)) > 10800 }}
+    - condition: state
+      entity_id: fan.master_bedroom_air_purifier
+      attribute: preset_mode
+      state: auto
+  actions:
+    - action: fan.set_percentage
+      data:
+        percentage: 100
+      target:
+        entity_id: fan.master_bedroom_air_purifier
+    - wait_for_trigger:
+        - trigger: state
+          entity_id: binary_sensor.presence_bedroom
+          to: "on"
+      timeout:
+        minutes: 10
+    - action: fan.set_preset_mode
+      data:
+        preset_mode: auto
+      target:
+        entity_id: fan.master_bedroom_air_purifier
+
+- id: "1736361791549"
+  alias: Bedroom - Night Mode - Set
+  mode: single
+  triggers:
+    - trigger: time
+      at: "23:00:00"
+    - trigger: state
+      entity_id:
+        - binary_sensor.esp01_bed_right_occupancy
+        - binary_sensor.esp01_bed_left_occupancy
+      from: "off"
+      to: "on"
+      for:
+        minutes: 20
+  conditions:
+    - condition: time
+      after: "21:00:00"
+    - condition: state
+      entity_id: binary_sensor.presence_bedroom
+      state: "on"
+  actions:
+    - action: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.bedroom_night_mode

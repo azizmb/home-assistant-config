@@ -1,0 +1,14 @@
+# Global flag automations - reset night mode, etc.
+
+- id: "1736361583980"
+  alias: Global - Reset Night Mode
+  mode: single
+  triggers:
+    - trigger: sun
+      event: sunrise
+      offset: 0
+  conditions: []
+  actions:
+    - action: input_boolean.turn_off
+      target:
+        label_id: flag_night_mode

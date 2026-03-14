@@ -1,0 +1,31 @@
+# Living room controls - wireless switch
+
+- id: "1740226912912"
+  alias: Living Room - Controls - WSS
+  use_blueprint:
+    path: local/ts004-wss.yaml
+    input:
+      switch:
+        - sensor.wss01_action
+      button_one_short_press: []
+      button_one_double_press: []
+      button_two_short_press:
+        - action: light.toggle
+          target:
+            entity_id: light.zss3g01_l1
+      button_three_short_press:
+        - action: cover.toggle
+          data: {}
+          target:
+            entity_id: cover.curtains_living_room_side
+      button_three_double_press:
+        - action: cover.set_cover_position
+          data:
+            position: 50
+          target:
+            entity_id: cover.curtains_living_room_side
+      button_four_short_press:
+        - action: light.toggle
+          data: {}
+          target:
+            entity_id: light.living_room_grow_lights

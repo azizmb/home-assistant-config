@@ -1,0 +1,125 @@
+# Dynamic presence sensors per room
+# Driven by labels: moving_presence, still_presence
+# Add a device: assign to area → label its entities → auto-included
+
+- binary_sensor:
+  - name: "Moving Presence - Bedroom"
+    device_class: motion
+    state: >
+      {% set area = 'Bedroom' %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', label_entities('moving_presence')) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Still Presence - Bedroom"
+    device_class: presence
+    state: >
+      {% set area = 'Bedroom' %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', label_entities('still_presence')) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Presence - Bedroom"
+    device_class: presence
+    state: >
+      {% set area = 'Bedroom' %}
+      {% set labeled = label_entities('moving_presence') + label_entities('still_presence') %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', labeled) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Moving Presence - Living Room"
+    device_class: motion
+    state: >
+      {% set area = 'Living Room' %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', label_entities('moving_presence')) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Still Presence - Living Room"
+    device_class: presence
+    state: >
+      {% set area = 'Living Room' %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', label_entities('still_presence')) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Presence - Living Room"
+    device_class: presence
+    state: >
+      {% set area = 'Living Room' %}
+      {% set labeled = label_entities('moving_presence') + label_entities('still_presence') %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', labeled) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Moving Presence - Kitchen"
+    device_class: motion
+    state: >
+      {% set area = 'Kitchen' %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', label_entities('moving_presence')) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Still Presence - Kitchen"
+    device_class: presence
+    state: >
+      {% set area = 'Kitchen' %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', label_entities('still_presence')) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Presence - Kitchen"
+    device_class: presence
+    state: >
+      {% set area = 'Kitchen' %}
+      {% set labeled = label_entities('moving_presence') + label_entities('still_presence') %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', labeled) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Moving Presence - Laundry"
+    device_class: motion
+    state: >
+      {% set area = 'Laundry' %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', label_entities('moving_presence')) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Moving Presence - Middle Room"
+    device_class: motion
+    state: >
+      {% set area = 'Middle Room' %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', label_entities('moving_presence')) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Still Presence - Middle Room"
+    device_class: presence
+    state: >
+      {% set area = 'Middle Room' %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', label_entities('still_presence')) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}
+
+  - name: "Presence - Middle Room"
+    device_class: presence
+    state: >
+      {% set area = 'Middle Room' %}
+      {% set labeled = label_entities('moving_presence') + label_entities('still_presence') %}
+      {% set sensors = expand(area_entities(area))
+        | selectattr('domain', 'equalto', 'binary_sensor')
+        | selectattr('entity_id', 'in', labeled) %}
+      {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}

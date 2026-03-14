@@ -1,19 +1,16 @@
 blueprint:
   name: Zigbee2MQTT - Tuya 4-Button Scene Switch
-  description: Automate your Tuya 4-Button Scene Switch via Zigbee2MQTT.
+  description: Automate your Tuya 4-Button Scene Switch via Zigbee2MQTT (MQTT trigger).
   domain: automation
   input:
     mode:
       name: Automation Mode
       default: "restart"
     switch:
-      name: Tuya 4-Button Scene Switch
-      description: Tuya 4-Button Scene Switch to use
+      name: Z2M MQTT Topic
+      description: The full MQTT topic for the device (e.g. zigbee2mqtt/Z-RC4-01)
       selector:
-        entity:
-          integration: mqtt
-          domain: sensor
-          multiple: true
+        text: {}
     button_one_short_press:
       name: Single Press - Button 1
       description: Action to run on button 1 (lower-left) single press
@@ -86,50 +83,36 @@ blueprint:
       default: []
       selector:
         action: {}
-  source_url: https://github.com/AramidX/ha-blueprint/blob/4de1fb2c9fe1d96a58f09c28b1d4a7760e0e9d2b/blueprints/tuya/tuya_4button_scene_switch_z2m.yaml
 mode: !input "mode"
 max_exceeded: silent
 trigger:
-- platform: state
-  entity_id: !input "switch"
-  attribute: action
+  - platform: mqtt
+    topic: !input "switch"
 action:
-- variables:
-    command: "{{ trigger.to_state.state }}"
-- choose:
-  - conditions:
-    - "{{ command == '1_single' }}"
-    sequence: !input "button_one_short_press"
-  - conditions:
-    - "{{ command == '2_single' }}"
-    sequence: !input "button_two_short_press"
-  - conditions:
-    - "{{ command == '3_single' }}"
-    sequence: !input "button_three_short_press"
-  - conditions:
-    - "{{ command == '4_single' }}"
-    sequence: !input "button_four_short_press"
-  - conditions:
-    - "{{ command == '1_double' }}"
-    sequence: !input "button_one_double_press"
-  - conditions:
-    - "{{ command == '2_double' }}"
-    sequence: !input "button_two_double_press"
-  - conditions:
-    - "{{ command == '3_double' }}"
-    sequence: !input "button_three_double_press"
-  - conditions:
-    - "{{ command == '4_double' }}"
-    sequence: !input "button_four_double_press"
-  - conditions:
-    - "{{ command == '1_hold' }}"
-    sequence: !input "button_one_long_press"
-  - conditions:
-    - "{{ command == '2_hold' }}"
-    sequence: !input "button_two_long_press"
-  - conditions:
-    - "{{ command == '3_hold' }}"
-    sequence: !input "button_three_long_press"
-  - conditions:
-    - "{{ command == '4_hold' }}"
-    sequence: !input "button_four_long_press"
+  - variables:
+      command: "{{ trigger.payload_json.action }}"
+  - choose:
+    - conditions: "{{ command == '1_single' }}"
+      sequence: !input "button_one_short_press"
+    - conditions: "{{ command == '2_single' }}"
+      sequence: !input "button_two_short_press"
+    - conditions: "{{ command == '3_single' }}"
+      sequence: !input "button_three_short_press"
+    - conditions: "{{ command == '4_single' }}"
+      sequence: !input "button_four_short_press"
+    - conditions: "{{ command == '1_double' }}"
+      sequence: !input "button_one_double_press"
+    - conditions: "{{ command == '2_double' }}"
+      sequence: !input "button_two_double_press"
+    - conditions: "{{ command == '3_double' }}"
+      sequence: !input "button_three_double_press"
+    - conditions: "{{ command == '4_double' }}"
+      sequence: !input "button_four_double_press"
+    - conditions: "{{ command == '1_hold' }}"
+      sequence: !input "button_one_long_press"
+    - conditions: "{{ command == '2_hold' }}"
+      sequence: !input "button_two_long_press"
+    - conditions: "{{ command == '3_hold' }}"
+      sequence: !input "button_three_long_press"
+    - conditions: "{{ command == '4_hold' }}"
+      sequence: !input "button_four_long_press"

@@ -35,13 +35,3 @@
       {% else %}
         unknown
       {% endif %}
-
-- binary_sensor:
-    - name: "Occupancy - Living Room"
-      device_class: occupancy
-      state: >
-        {% set area = 'Living Room' %}
-        {% set sensors = expand(area_entities(area))
-          | selectattr('domain', 'equalto', 'binary_sensor')
-          | selectattr('attributes.device_class', 'in', ['motion', 'occupancy', 'presence']) %}
-        {{ sensors | selectattr('state', 'equalto', 'on') | list | count > 0 }}

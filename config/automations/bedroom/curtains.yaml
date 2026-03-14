@@ -25,7 +25,7 @@
   use_blueprint:
     path: local/peek-curtains.yaml
     input:
-      occupancy_entity: binary_sensor.occupancy_bedroom
+      occupancy_entity: binary_sensor.presence_bedroom
       cover_target: cover.curtains_bedroom
       trigger:
         - platform: sun
@@ -37,7 +37,7 @@
   use_blueprint:
     path: local/peek-curtains.yaml
     input:
-      occupancy_entity: binary_sensor.occupancy_bedroom
+      occupancy_entity: binary_sensor.presence_bedroom
       cover_target: cover.curtains_bedroom
       trigger:
         - platform: sun

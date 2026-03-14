@@ -1,0 +1,11 @@
+# Mom's room lighting automations
+
+- id: "1736423920854"
+  alias: Mom's Room - Lights - Passage
+  use_blueprint:
+    path: local/occupancy-lights.yaml
+    input:
+      occupancy_entity: binary_sensor.ms08_occupancy
+      light_target:
+        - light.zss3g02_right
+      no_occupancy_wait: 30

@@ -1,0 +1,29 @@
+# Grow lab automations - fans and equipment
+
+- id: "1740585724620"
+  alias: Grow Lab - Fans - Schedule
+  mode: single
+  triggers:
+    - trigger: time_pattern
+      minutes: "10"
+      id: start
+    - trigger: time_pattern
+      minutes: "14"
+      id: stop
+  conditions: []
+  actions:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: start
+          sequence:
+            - action: switch.turn_on
+              target:
+                entity_id: switch.grow_lab_fan
+        - conditions:
+            - condition: trigger
+              id: stop
+          sequence:
+            - action: switch.turn_off
+              target:
+                entity_id: switch.grow_lab_fan
